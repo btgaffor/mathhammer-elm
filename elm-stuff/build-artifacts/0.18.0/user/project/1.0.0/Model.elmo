@@ -1,0 +1,42 @@
+var _user$project$Model$AttackRecord = function (a) {
+	return {attacks: a};
+};
+var _user$project$Model$HitRecord = F2(
+	function (a, b) {
+		return {skill: a, reroll: b};
+	});
+var _user$project$Model$WoundRecord = F3(
+	function (a, b, c) {
+		return {strength: a, toughness: b, reroll: c};
+	});
+var _user$project$Model$SaveRecord = F2(
+	function (a, b) {
+		return {save: a, armorPiercing: b};
+	});
+var _user$project$Model$DamageRecord = F2(
+	function (a, b) {
+		return {damage: a, additionalSave: b};
+	});
+var _user$project$Model$DistributionRow = F2(
+	function (a, b) {
+		return {thisPercent: a, totalPercent: b};
+	});
+var _user$project$Model$Model = F4(
+	function (a, b, c, d) {
+		return {iterations: a, targetWounds: b, weapons: c, distribution: d};
+	});
+var _user$project$Model$DamageRoll = function (a) {
+	return {ctor: 'DamageRoll', _0: a};
+};
+var _user$project$Model$SaveRoll = function (a) {
+	return {ctor: 'SaveRoll', _0: a};
+};
+var _user$project$Model$WoundRoll = function (a) {
+	return {ctor: 'WoundRoll', _0: a};
+};
+var _user$project$Model$HitRoll = function (a) {
+	return {ctor: 'HitRoll', _0: a};
+};
+var _user$project$Model$AttackRoll = function (a) {
+	return {ctor: 'AttackRoll', _0: a};
+};

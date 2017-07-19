@@ -1,0 +1,803 @@
+var _user$project$View$codeBlock = function (content) {
+	return A2(
+		_elm_lang$html$Html$pre,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$style(
+				{
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'padding', _1: '5px'},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'color', _1: '#333'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'background-color', _1: '#f5f5f5'},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'border', _1: '1px solid #ccc'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'border-radius', _1: '5px'},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'margin-top', _1: '10px'},
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}
+				}),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$code,
+				{ctor: '[]'},
+				content),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$View$removeButton = function (index) {
+	var _p0 = index;
+	if (_p0.ctor === 'Just') {
+		return {
+			ctor: '::',
+			_0: A2(
+				_rundis$elm_bootstrap$Bootstrap_Button$button,
+				{
+					ctor: '::',
+					_0: _rundis$elm_bootstrap$Bootstrap_Button$danger,
+					_1: {
+						ctor: '::',
+						_0: _rundis$elm_bootstrap$Bootstrap_Button$small,
+						_1: {
+							ctor: '::',
+							_0: _rundis$elm_bootstrap$Bootstrap_Button$attrs(
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$style(
+										{
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: 'float', _1: 'right'},
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('X'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		};
+	} else {
+		return {ctor: '[]'};
+	}
+};
+var _user$project$View$inputCard = F3(
+	function (indexes, header, content) {
+		return _rundis$elm_bootstrap$Bootstrap_Grid$simpleRow(
+			{
+				ctor: '::',
+				_0: A2(
+					_rundis$elm_bootstrap$Bootstrap_Grid$col,
+					{
+						ctor: '::',
+						_0: _rundis$elm_bootstrap$Bootstrap_Grid_Col$md12,
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _rundis$elm_bootstrap$Bootstrap_Card$view(
+							A3(
+								_rundis$elm_bootstrap$Bootstrap_Card$block,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: A2(
+										_rundis$elm_bootstrap$Bootstrap_Card$text,
+										{ctor: '[]'},
+										content),
+									_1: {ctor: '[]'}
+								},
+								A3(
+									_rundis$elm_bootstrap$Bootstrap_Card$headerH6,
+									{ctor: '[]'},
+									A2(
+										_elm_lang$core$List$append,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text(header),
+											_1: {ctor: '[]'}
+										},
+										_user$project$View$removeButton(indexes)),
+									_rundis$elm_bootstrap$Bootstrap_Card$config(
+										{
+											ctor: '::',
+											_0: _rundis$elm_bootstrap$Bootstrap_Card$attrs(
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$style(
+														{
+															ctor: '::',
+															_0: {ctor: '_Tuple2', _0: 'margin-bottom', _1: '20px'},
+															_1: {ctor: '[]'}
+														}),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										})))),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			});
+	});
+var _user$project$View$rollInput = F4(
+	function (weaponIndex, weapon, rollIndex, roll) {
+		var _p1 = roll;
+		switch (_p1.ctor) {
+			case 'AttackRoll':
+				var _p2 = _p1._0;
+				return A3(
+					_user$project$View$inputCard,
+					_elm_lang$core$Maybe$Just(
+						{ctor: '_Tuple2', _0: weaponIndex, _1: rollIndex}),
+					'Attacks',
+					{
+						ctor: '::',
+						_0: A2(
+							_rundis$elm_bootstrap$Bootstrap_Form$group,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: A2(
+									_rundis$elm_bootstrap$Bootstrap_Form$label,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Attacks (e.g. 1 or 2d6)'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$text(
+										{
+											ctor: '::',
+											_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$value(_p2.attacks),
+											_1: {
+												ctor: '::',
+												_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$onInput(
+													A4(_user$project$Update$ChangeAttacks, weaponIndex, weapon, rollIndex, _p2)),
+												_1: {ctor: '[]'}
+											}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {ctor: '[]'}
+					});
+			case 'HitRoll':
+				var _p3 = _p1._0;
+				return A3(
+					_user$project$View$inputCard,
+					_elm_lang$core$Maybe$Just(
+						{ctor: '_Tuple2', _0: weaponIndex, _1: rollIndex}),
+					'To Hit',
+					{
+						ctor: '::',
+						_0: A2(
+							_rundis$elm_bootstrap$Bootstrap_Form$group,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: A2(
+									_rundis$elm_bootstrap$Bootstrap_Form$label,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Ballistic/Weapon Skill'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$number(
+										{
+											ctor: '::',
+											_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$value(
+												_elm_lang$core$Basics$toString(_p3.skill)),
+											_1: {
+												ctor: '::',
+												_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$onInput(
+													A4(_user$project$Update$ChangeSkill, weaponIndex, weapon, rollIndex, _p3)),
+												_1: {ctor: '[]'}
+											}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_rundis$elm_bootstrap$Bootstrap_Form$group,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: A2(
+										_rundis$elm_bootstrap$Bootstrap_Form$label,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Reroll'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_rundis$elm_bootstrap$Bootstrap_Form_Select$select,
+											{
+												ctor: '::',
+												_0: _rundis$elm_bootstrap$Bootstrap_Form_Select$onChange(
+													A4(_user$project$Update$ChangeHitReroll, weaponIndex, weapon, rollIndex, _p3)),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: A2(
+													_rundis$elm_bootstrap$Bootstrap_Form_Select$item,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$value('none'),
+														_1: {ctor: '[]'}
+													},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('None'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_rundis$elm_bootstrap$Bootstrap_Form_Select$item,
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$value('all'),
+															_1: {ctor: '[]'}
+														},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text('All'),
+															_1: {ctor: '[]'}
+														}),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_rundis$elm_bootstrap$Bootstrap_Form_Select$item,
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html_Attributes$value('ones'),
+																_1: {ctor: '[]'}
+															},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text('Ones'),
+																_1: {ctor: '[]'}
+															}),
+														_1: {ctor: '[]'}
+													}
+												}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}
+					});
+			case 'WoundRoll':
+				var _p4 = _p1._0;
+				return A3(
+					_user$project$View$inputCard,
+					_elm_lang$core$Maybe$Just(
+						{ctor: '_Tuple2', _0: weaponIndex, _1: rollIndex}),
+					'To Wound',
+					{
+						ctor: '::',
+						_0: A2(
+							_rundis$elm_bootstrap$Bootstrap_Form$group,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: A2(
+									_rundis$elm_bootstrap$Bootstrap_Form$label,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Strength'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$number(
+										{
+											ctor: '::',
+											_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$value(
+												_elm_lang$core$Basics$toString(_p4.strength)),
+											_1: {
+												ctor: '::',
+												_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$onInput(
+													A4(_user$project$Update$ChangeStrength, weaponIndex, weapon, rollIndex, _p4)),
+												_1: {ctor: '[]'}
+											}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_rundis$elm_bootstrap$Bootstrap_Form$group,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: A2(
+										_rundis$elm_bootstrap$Bootstrap_Form$label,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Toughness'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$number(
+											{
+												ctor: '::',
+												_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$value(
+													_elm_lang$core$Basics$toString(_p4.toughness)),
+												_1: {
+													ctor: '::',
+													_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$onInput(
+														A4(_user$project$Update$ChangeToughness, weaponIndex, weapon, rollIndex, _p4)),
+													_1: {ctor: '[]'}
+												}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_rundis$elm_bootstrap$Bootstrap_Form$group,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: A2(
+											_rundis$elm_bootstrap$Bootstrap_Form$label,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Reroll'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_rundis$elm_bootstrap$Bootstrap_Form_Select$select,
+												{
+													ctor: '::',
+													_0: _rundis$elm_bootstrap$Bootstrap_Form_Select$onChange(
+														A4(_user$project$Update$ChangeWoundReroll, weaponIndex, weapon, rollIndex, _p4)),
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: A2(
+														_rundis$elm_bootstrap$Bootstrap_Form_Select$item,
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$value('none'),
+															_1: {ctor: '[]'}
+														},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text('None'),
+															_1: {ctor: '[]'}
+														}),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_rundis$elm_bootstrap$Bootstrap_Form_Select$item,
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html_Attributes$value('all'),
+																_1: {ctor: '[]'}
+															},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text('All'),
+																_1: {ctor: '[]'}
+															}),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_rundis$elm_bootstrap$Bootstrap_Form_Select$item,
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Attributes$value('ones'),
+																	_1: {ctor: '[]'}
+																},
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html$text('Ones'),
+																	_1: {ctor: '[]'}
+																}),
+															_1: {ctor: '[]'}
+														}
+													}
+												}),
+											_1: {ctor: '[]'}
+										}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}
+					});
+			case 'SaveRoll':
+				var _p5 = _p1._0;
+				return A3(
+					_user$project$View$inputCard,
+					_elm_lang$core$Maybe$Just(
+						{ctor: '_Tuple2', _0: weaponIndex, _1: rollIndex}),
+					'Save',
+					{
+						ctor: '::',
+						_0: A2(
+							_rundis$elm_bootstrap$Bootstrap_Form$group,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: A2(
+									_rundis$elm_bootstrap$Bootstrap_Form$label,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Save'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$number(
+										{
+											ctor: '::',
+											_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$value(
+												_elm_lang$core$Basics$toString(_p5.save)),
+											_1: {
+												ctor: '::',
+												_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$onInput(
+													A4(_user$project$Update$ChangeSave, weaponIndex, weapon, rollIndex, _p5)),
+												_1: {ctor: '[]'}
+											}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_rundis$elm_bootstrap$Bootstrap_Form$group,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: A2(
+										_rundis$elm_bootstrap$Bootstrap_Form$label,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Armor Piercing'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$number(
+											{
+												ctor: '::',
+												_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$value(
+													_elm_lang$core$Basics$toString(_p5.armorPiercing)),
+												_1: {
+													ctor: '::',
+													_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$onInput(
+														A4(_user$project$Update$ChangeArmorPiercing, weaponIndex, weapon, rollIndex, _p5)),
+													_1: {ctor: '[]'}
+												}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}
+					});
+			default:
+				var _p6 = _p1._0;
+				return A3(
+					_user$project$View$inputCard,
+					_elm_lang$core$Maybe$Just(
+						{ctor: '_Tuple2', _0: weaponIndex, _1: rollIndex}),
+					'Damage',
+					{
+						ctor: '::',
+						_0: A2(
+							_rundis$elm_bootstrap$Bootstrap_Form$group,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: A2(
+									_rundis$elm_bootstrap$Bootstrap_Form$label,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Damage (e.g. 1 or 2d6)'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$text(
+										{
+											ctor: '::',
+											_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$value(_p6.damage),
+											_1: {
+												ctor: '::',
+												_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$onInput(
+													A4(_user$project$Update$ChangeDamage, weaponIndex, weapon, rollIndex, _p6)),
+												_1: {ctor: '[]'}
+											}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_rundis$elm_bootstrap$Bootstrap_Form$group,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: A2(
+										_rundis$elm_bootstrap$Bootstrap_Form$label,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Additional Save (e.g. Feel No Pain)'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$number(
+											{
+												ctor: '::',
+												_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$value(
+													_elm_lang$core$Basics$toString(_p6.additionalSave)),
+												_1: {
+													ctor: '::',
+													_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$onInput(
+														A4(_user$project$Update$ChangeAdditionalSave, weaponIndex, weapon, rollIndex, _p6)),
+													_1: {ctor: '[]'}
+												}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}
+					});
+		}
+	});
+var _user$project$View$weaponInput = F2(
+	function (weaponIndex, weapon) {
+		return A2(
+			_rundis$elm_bootstrap$Bootstrap_Grid$col,
+			{
+				ctor: '::',
+				_0: _rundis$elm_bootstrap$Bootstrap_Grid_Col$md4,
+				_1: {ctor: '[]'}
+			},
+			_elm_lang$core$Array$toList(
+				A2(
+					_elm_lang$core$Array$indexedMap,
+					A2(_user$project$View$rollInput, weaponIndex, weapon),
+					weapon)));
+	});
+var _user$project$View$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _rundis$elm_bootstrap$Bootstrap_CDN$stylesheet,
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$h1,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('New Distribution'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_rundis$elm_bootstrap$Bootstrap_Grid$containerFluid,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _rundis$elm_bootstrap$Bootstrap_Grid$simpleRow(
+								{
+									ctor: '::',
+									_0: A2(
+										_rundis$elm_bootstrap$Bootstrap_Grid$col,
+										{
+											ctor: '::',
+											_0: _rundis$elm_bootstrap$Bootstrap_Grid_Col$md4,
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: A3(
+												_user$project$View$inputCard,
+												_elm_lang$core$Maybe$Nothing,
+												'General Options',
+												{
+													ctor: '::',
+													_0: A2(
+														_rundis$elm_bootstrap$Bootstrap_Form$group,
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: A2(
+																_rundis$elm_bootstrap$Bootstrap_Form$label,
+																{ctor: '[]'},
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html$text('Iterations'),
+																	_1: {ctor: '[]'}
+																}),
+															_1: {
+																ctor: '::',
+																_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$number(
+																	{
+																		ctor: '::',
+																		_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$value(
+																			_elm_lang$core$Basics$toString(model.iterations)),
+																		_1: {
+																			ctor: '::',
+																			_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$onInput(_user$project$Update$ChangeIterations),
+																			_1: {ctor: '[]'}
+																		}
+																	}),
+																_1: {ctor: '[]'}
+															}
+														}),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_rundis$elm_bootstrap$Bootstrap_Form$group,
+															{ctor: '[]'},
+															{
+																ctor: '::',
+																_0: A2(
+																	_rundis$elm_bootstrap$Bootstrap_Form$label,
+																	{ctor: '[]'},
+																	{
+																		ctor: '::',
+																		_0: _elm_lang$html$Html$text('Target Wounds Per Model'),
+																		_1: {ctor: '[]'}
+																	}),
+																_1: {
+																	ctor: '::',
+																	_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$number(
+																		{
+																			ctor: '::',
+																			_0: _rundis$elm_bootstrap$Bootstrap_Form_Input$value(
+																				_elm_lang$core$Basics$toString(model.targetWounds)),
+																			_1: {ctor: '[]'}
+																		}),
+																	_1: {ctor: '[]'}
+																}
+															}),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_rundis$elm_bootstrap$Bootstrap_Button$button,
+																{
+																	ctor: '::',
+																	_0: _rundis$elm_bootstrap$Bootstrap_Button$primary,
+																	_1: {
+																		ctor: '::',
+																		_0: _rundis$elm_bootstrap$Bootstrap_Button$onClick(_user$project$Update$AddWeapon),
+																		_1: {ctor: '[]'}
+																	}
+																},
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html$text('Add Weapon'),
+																	_1: {ctor: '[]'}
+																}),
+															_1: {ctor: '[]'}
+														}
+													}
+												}),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: _rundis$elm_bootstrap$Bootstrap_Grid$simpleRow(
+									_elm_lang$core$Array$toList(
+										A2(_elm_lang$core$Array$indexedMap, _user$project$View$weaponInput, model.weapons))),
+								_1: {
+									ctor: '::',
+									_0: _rundis$elm_bootstrap$Bootstrap_Grid$simpleRow(
+										{
+											ctor: '::',
+											_0: A2(
+												_rundis$elm_bootstrap$Bootstrap_Grid$col,
+												{
+													ctor: '::',
+													_0: _rundis$elm_bootstrap$Bootstrap_Grid_Col$md12,
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: A2(
+														_rundis$elm_bootstrap$Bootstrap_Button$button,
+														{
+															ctor: '::',
+															_0: _rundis$elm_bootstrap$Bootstrap_Button$onClick(_user$project$Update$RequestCalculation),
+															_1: {ctor: '[]'}
+														},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text('Perform Calculation'),
+															_1: {ctor: '[]'}
+														}),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: _rundis$elm_bootstrap$Bootstrap_Grid$simpleRow(
+											{
+												ctor: '::',
+												_0: A2(
+													_rundis$elm_bootstrap$Bootstrap_Grid$col,
+													{
+														ctor: '::',
+														_0: _rundis$elm_bootstrap$Bootstrap_Grid_Col$md12,
+														_1: {ctor: '[]'}
+													},
+													{
+														ctor: '::',
+														_0: _user$project$View$codeBlock(
+															_user$project$Distribution$renderDistribution(model.distribution)),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}),
+					_1: {ctor: '[]'}
+				}
+			}
+		});
+};

@@ -1,0 +1,336 @@
+var _user$project$Update$defaultWeapon = _elm_lang$core$Array$fromList(
+	{
+		ctor: '::',
+		_0: _user$project$Model$AttackRoll(
+			{attacks: '1'}),
+		_1: {
+			ctor: '::',
+			_0: _user$project$Model$HitRoll(
+				{skill: 0, reroll: 'none'}),
+			_1: {
+				ctor: '::',
+				_0: _user$project$Model$WoundRoll(
+					{strength: 0, toughness: 0, reroll: 'none'}),
+				_1: {
+					ctor: '::',
+					_0: _user$project$Model$SaveRoll(
+						{save: 0, armorPiercing: 0}),
+					_1: {
+						ctor: '::',
+						_0: _user$project$Model$DamageRoll(
+							{damage: '1', additionalSave: 7}),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		}
+	});
+var _user$project$Update$model = {
+	iterations: 10000,
+	targetWounds: 1,
+	weapons: _elm_lang$core$Array$fromList(
+		{
+			ctor: '::',
+			_0: _user$project$Update$defaultWeapon,
+			_1: {ctor: '[]'}
+		}),
+	distribution: _elm_lang$core$Maybe$Nothing
+};
+var _user$project$Update$init = {ctor: '_Tuple2', _0: _user$project$Update$model, _1: _elm_lang$core$Platform_Cmd$none};
+var _user$project$Update$ChangeAdditionalSave = F5(
+	function (a, b, c, d, e) {
+		return {ctor: 'ChangeAdditionalSave', _0: a, _1: b, _2: c, _3: d, _4: e};
+	});
+var _user$project$Update$ChangeDamage = F5(
+	function (a, b, c, d, e) {
+		return {ctor: 'ChangeDamage', _0: a, _1: b, _2: c, _3: d, _4: e};
+	});
+var _user$project$Update$ChangeArmorPiercing = F5(
+	function (a, b, c, d, e) {
+		return {ctor: 'ChangeArmorPiercing', _0: a, _1: b, _2: c, _3: d, _4: e};
+	});
+var _user$project$Update$ChangeSave = F5(
+	function (a, b, c, d, e) {
+		return {ctor: 'ChangeSave', _0: a, _1: b, _2: c, _3: d, _4: e};
+	});
+var _user$project$Update$ChangeWoundReroll = F5(
+	function (a, b, c, d, e) {
+		return {ctor: 'ChangeWoundReroll', _0: a, _1: b, _2: c, _3: d, _4: e};
+	});
+var _user$project$Update$ChangeToughness = F5(
+	function (a, b, c, d, e) {
+		return {ctor: 'ChangeToughness', _0: a, _1: b, _2: c, _3: d, _4: e};
+	});
+var _user$project$Update$ChangeStrength = F5(
+	function (a, b, c, d, e) {
+		return {ctor: 'ChangeStrength', _0: a, _1: b, _2: c, _3: d, _4: e};
+	});
+var _user$project$Update$ChangeHitReroll = F5(
+	function (a, b, c, d, e) {
+		return {ctor: 'ChangeHitReroll', _0: a, _1: b, _2: c, _3: d, _4: e};
+	});
+var _user$project$Update$ChangeSkill = F5(
+	function (a, b, c, d, e) {
+		return {ctor: 'ChangeSkill', _0: a, _1: b, _2: c, _3: d, _4: e};
+	});
+var _user$project$Update$ChangeAttacks = F5(
+	function (a, b, c, d, e) {
+		return {ctor: 'ChangeAttacks', _0: a, _1: b, _2: c, _3: d, _4: e};
+	});
+var _user$project$Update$ChangeIterations = function (a) {
+	return {ctor: 'ChangeIterations', _0: a};
+};
+var _user$project$Update$PerformCalculation = function (a) {
+	return {ctor: 'PerformCalculation', _0: a};
+};
+var _user$project$Update$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		switch (_p0.ctor) {
+			case 'RequestCalculation':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: A2(
+						_elm_lang$core$Random$generate,
+						_user$project$Update$PerformCalculation,
+						A2(_elm_lang$core$Random$int, _elm_lang$core$Random$minInt, _elm_lang$core$Random$maxInt))
+				};
+			case 'PerformCalculation':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							distribution: _elm_lang$core$Maybe$Just(
+								A2(_user$project$Distribution$distributionData, model, _p0._0))
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'AddWeapon':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							weapons: A2(_elm_lang$core$Array$push, _user$project$Update$defaultWeapon, model.weapons)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'ChangeIterations':
+				var _p1 = _elm_lang$core$String$toInt(_p0._0);
+				if (_p1.ctor === 'Ok') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{iterations: _p1._0}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+				}
+			case 'ChangeAttacks':
+				var newAttackRecord = _elm_lang$core$Native_Utils.update(
+					_p0._3,
+					{attacks: _p0._4});
+				var newWeapon = A3(
+					_elm_lang$core$Array$set,
+					_p0._2,
+					_user$project$Model$AttackRoll(newAttackRecord),
+					_p0._1);
+				var newWeapons = A3(_elm_lang$core$Array$set, _p0._0, newWeapon, model.weapons);
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{weapons: newWeapons}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'ChangeSkill':
+				var _p2 = _elm_lang$core$String$toInt(_p0._4);
+				if (_p2.ctor === 'Ok') {
+					var newHitRecord = _elm_lang$core$Native_Utils.update(
+						_p0._3,
+						{skill: _p2._0});
+					var newWeapon = A3(
+						_elm_lang$core$Array$set,
+						_p0._2,
+						_user$project$Model$HitRoll(newHitRecord),
+						_p0._1);
+					var newWeapons = A3(_elm_lang$core$Array$set, _p0._0, newWeapon, model.weapons);
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{weapons: newWeapons}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+				}
+			case 'ChangeHitReroll':
+				var newHitRecord = _elm_lang$core$Native_Utils.update(
+					_p0._3,
+					{reroll: _p0._4});
+				var newWeapon = A3(
+					_elm_lang$core$Array$set,
+					_p0._2,
+					_user$project$Model$HitRoll(newHitRecord),
+					_p0._1);
+				var newWeapons = A3(_elm_lang$core$Array$set, _p0._0, newWeapon, model.weapons);
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{weapons: newWeapons}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'ChangeStrength':
+				var _p3 = _elm_lang$core$String$toInt(_p0._4);
+				if (_p3.ctor === 'Ok') {
+					var newWoundRecord = _elm_lang$core$Native_Utils.update(
+						_p0._3,
+						{strength: _p3._0});
+					var newWeapon = A3(
+						_elm_lang$core$Array$set,
+						_p0._2,
+						_user$project$Model$WoundRoll(newWoundRecord),
+						_p0._1);
+					var newWeapons = A3(_elm_lang$core$Array$set, _p0._0, newWeapon, model.weapons);
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{weapons: newWeapons}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+				}
+			case 'ChangeToughness':
+				var _p4 = _elm_lang$core$String$toInt(_p0._4);
+				if (_p4.ctor === 'Ok') {
+					var newWoundRecord = _elm_lang$core$Native_Utils.update(
+						_p0._3,
+						{toughness: _p4._0});
+					var newWeapon = A3(
+						_elm_lang$core$Array$set,
+						_p0._2,
+						_user$project$Model$WoundRoll(newWoundRecord),
+						_p0._1);
+					var newWeapons = A3(_elm_lang$core$Array$set, _p0._0, newWeapon, model.weapons);
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{weapons: newWeapons}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+				}
+			case 'ChangeWoundReroll':
+				var newWoundRecord = _elm_lang$core$Native_Utils.update(
+					_p0._3,
+					{reroll: _p0._4});
+				var newWeapon = A3(
+					_elm_lang$core$Array$set,
+					_p0._2,
+					_user$project$Model$WoundRoll(newWoundRecord),
+					_p0._1);
+				var newWeapons = A3(_elm_lang$core$Array$set, _p0._0, newWeapon, model.weapons);
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{weapons: newWeapons}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'ChangeSave':
+				var _p5 = _elm_lang$core$String$toInt(_p0._4);
+				if (_p5.ctor === 'Ok') {
+					var newSaveRecord = _elm_lang$core$Native_Utils.update(
+						_p0._3,
+						{save: _p5._0});
+					var newWeapon = A3(
+						_elm_lang$core$Array$set,
+						_p0._2,
+						_user$project$Model$SaveRoll(newSaveRecord),
+						_p0._1);
+					var newWeapons = A3(_elm_lang$core$Array$set, _p0._0, newWeapon, model.weapons);
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{weapons: newWeapons}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+				}
+			case 'ChangeArmorPiercing':
+				var _p6 = _elm_lang$core$String$toInt(_p0._4);
+				if (_p6.ctor === 'Ok') {
+					var newSaveRecord = _elm_lang$core$Native_Utils.update(
+						_p0._3,
+						{armorPiercing: _p6._0});
+					var newWeapon = A3(
+						_elm_lang$core$Array$set,
+						_p0._2,
+						_user$project$Model$SaveRoll(newSaveRecord),
+						_p0._1);
+					var newWeapons = A3(_elm_lang$core$Array$set, _p0._0, newWeapon, model.weapons);
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{weapons: newWeapons}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+				}
+			case 'ChangeDamage':
+				var newDamageRecord = _elm_lang$core$Native_Utils.update(
+					_p0._3,
+					{damage: _p0._4});
+				var newWeapon = A3(
+					_elm_lang$core$Array$set,
+					_p0._2,
+					_user$project$Model$DamageRoll(newDamageRecord),
+					_p0._1);
+				var newWeapons = A3(_elm_lang$core$Array$set, _p0._0, newWeapon, model.weapons);
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{weapons: newWeapons}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				var _p7 = _elm_lang$core$String$toInt(_p0._4);
+				if (_p7.ctor === 'Ok') {
+					var newDamageRecord = _elm_lang$core$Native_Utils.update(
+						_p0._3,
+						{additionalSave: _p7._0});
+					var newWeapon = A3(
+						_elm_lang$core$Array$set,
+						_p0._2,
+						_user$project$Model$DamageRoll(newDamageRecord),
+						_p0._1);
+					var newWeapons = A3(_elm_lang$core$Array$set, _p0._0, newWeapon, model.weapons);
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{weapons: newWeapons}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+				}
+		}
+	});
+var _user$project$Update$RequestCalculation = {ctor: 'RequestCalculation'};
+var _user$project$Update$AddWeapon = {ctor: 'AddWeapon'};

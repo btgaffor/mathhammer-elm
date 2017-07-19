@@ -1,0 +1,149 @@
+var _krisajenkins$formatting$Formatting$html = function (_p0) {
+	var _p1 = _p0;
+	return _p1._0(_elm_lang$html$Html$text);
+};
+var _krisajenkins$formatting$Formatting$print = function (_p2) {
+	var _p3 = _p2;
+	return _p3._0(_elm_lang$core$Basics$identity);
+};
+var _krisajenkins$formatting$Formatting$Format = function (a) {
+	return {ctor: 'Format', _0: a};
+};
+var _krisajenkins$formatting$Formatting$compose = F2(
+	function (_p5, _p4) {
+		var _p6 = _p5;
+		var _p7 = _p4;
+		return _krisajenkins$formatting$Formatting$Format(
+			function (callback) {
+				return _p6._0(
+					function (strF) {
+						return _p7._0(
+							function (strG) {
+								return callback(
+									A2(_elm_lang$core$Basics_ops['++'], strF, strG));
+							});
+					});
+			});
+	});
+var _krisajenkins$formatting$Formatting_ops = _krisajenkins$formatting$Formatting_ops || {};
+_krisajenkins$formatting$Formatting_ops['<>'] = _krisajenkins$formatting$Formatting$compose;
+var _krisajenkins$formatting$Formatting$map = F2(
+	function (f, _p8) {
+		var _p9 = _p8;
+		return _krisajenkins$formatting$Formatting$Format(
+			function (callback) {
+				return _p9._0(
+					function (_p10) {
+						return callback(
+							f(_p10));
+					});
+			});
+	});
+var _krisajenkins$formatting$Formatting$pad = F2(
+	function (n, $char) {
+		return _krisajenkins$formatting$Formatting$map(
+			A2(_elm_lang$core$String$pad, n, $char));
+	});
+var _krisajenkins$formatting$Formatting$padLeft = F2(
+	function (n, $char) {
+		return _krisajenkins$formatting$Formatting$map(
+			A2(_elm_lang$core$String$padLeft, n, $char));
+	});
+var _krisajenkins$formatting$Formatting$padRight = F2(
+	function (n, $char) {
+		return _krisajenkins$formatting$Formatting$map(
+			A2(_elm_lang$core$String$padRight, n, $char));
+	});
+var _krisajenkins$formatting$Formatting$premap = F2(
+	function (f, _p11) {
+		var _p12 = _p11;
+		return _krisajenkins$formatting$Formatting$Format(
+			function (callback) {
+				return function (_p13) {
+					return A2(
+						_p12._0,
+						callback,
+						f(_p13));
+				};
+			});
+	});
+var _krisajenkins$formatting$Formatting$toFormatter = function (f) {
+	return _krisajenkins$formatting$Formatting$Format(
+		function (callback) {
+			return function (_p14) {
+				return callback(
+					f(_p14));
+			};
+		});
+};
+var _krisajenkins$formatting$Formatting$any = _krisajenkins$formatting$Formatting$toFormatter(_elm_lang$core$Basics$toString);
+var _krisajenkins$formatting$Formatting$int = _krisajenkins$formatting$Formatting$any;
+var _krisajenkins$formatting$Formatting$bool = _krisajenkins$formatting$Formatting$any;
+var _krisajenkins$formatting$Formatting$float = _krisajenkins$formatting$Formatting$any;
+var _krisajenkins$formatting$Formatting$number = _krisajenkins$formatting$Formatting$any;
+var _krisajenkins$formatting$Formatting$apply = F2(
+	function (_p15, value) {
+		var _p16 = _p15;
+		return _krisajenkins$formatting$Formatting$Format(
+			function (callback) {
+				return A2(_p16._0, callback, value);
+			});
+	});
+var _krisajenkins$formatting$Formatting$s = function (str) {
+	return _krisajenkins$formatting$Formatting$Format(
+		function (c) {
+			return c(str);
+		});
+};
+var _krisajenkins$formatting$Formatting$wrap = F2(
+	function (wrapping, format) {
+		return A2(
+			_krisajenkins$formatting$Formatting_ops['<>'],
+			_krisajenkins$formatting$Formatting$s(wrapping),
+			A2(
+				_krisajenkins$formatting$Formatting_ops['<>'],
+				format,
+				_krisajenkins$formatting$Formatting$s(wrapping)));
+	});
+var _krisajenkins$formatting$Formatting$string = _krisajenkins$formatting$Formatting$Format(_elm_lang$core$Basics$identity);
+var _krisajenkins$formatting$Formatting$uriFragment = A2(_krisajenkins$formatting$Formatting$premap, _elm_lang$http$Http$encodeUri, _krisajenkins$formatting$Formatting$string);
+var _krisajenkins$formatting$Formatting$roundTo = function (n) {
+	return _krisajenkins$formatting$Formatting$Format(
+		F2(
+			function (callback, value) {
+				return callback(
+					function () {
+						if (_elm_lang$core$Native_Utils.eq(n, 0)) {
+							return _elm_lang$core$Basics$toString(
+								_elm_lang$core$Basics$round(value));
+						} else {
+							var finalFormat = A2(
+								_krisajenkins$formatting$Formatting_ops['<>'],
+								_krisajenkins$formatting$Formatting$string,
+								A2(
+									_krisajenkins$formatting$Formatting_ops['<>'],
+									_krisajenkins$formatting$Formatting$int,
+									A2(
+										_krisajenkins$formatting$Formatting_ops['<>'],
+										_krisajenkins$formatting$Formatting$s('.'),
+										A3(
+											_krisajenkins$formatting$Formatting$padLeft,
+											n,
+											_elm_lang$core$Native_Utils.chr('0'),
+											_krisajenkins$formatting$Formatting$int))));
+							var sign = (_elm_lang$core$Native_Utils.cmp(value, 0.0) < 0) ? '-' : '';
+							var exp = Math.pow(10, n);
+							var raised = _elm_lang$core$Basics$abs(
+								_elm_lang$core$Basics$round(
+									value * _elm_lang$core$Basics$toFloat(exp)));
+							return A4(
+								_krisajenkins$formatting$Formatting$print,
+								finalFormat,
+								sign,
+								(raised / exp) | 0,
+								A2(_elm_lang$core$Basics$rem, raised, exp));
+						}
+					}());
+			}));
+};
+var _krisajenkins$formatting$Formatting$dp = _krisajenkins$formatting$Formatting$roundTo;

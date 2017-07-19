@@ -1,0 +1,7 @@
+var _user$project$Main$main = _elm_lang$html$Html$program(
+	{
+		init: _user$project$Update$init,
+		view: _user$project$View$view,
+		update: _user$project$Update$update,
+		subscriptions: _elm_lang$core$Basics$always(_elm_lang$core$Platform_Sub$none)
+	})();

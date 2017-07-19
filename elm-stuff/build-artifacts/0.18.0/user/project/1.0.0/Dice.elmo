@@ -1,0 +1,117 @@
+var _user$project$Dice$splitDice = function (dice) {
+	var indexes = A2(_elm_lang$core$String$indexes, 'd', dice);
+	var _p0 = indexes;
+	if (_p0.ctor === '[]') {
+		var _p1 = _elm_lang$core$String$toInt(dice);
+		if (_p1.ctor === 'Ok') {
+			return {ctor: '_Tuple2', _0: _p1._0, _1: 1};
+		} else {
+			return {ctor: '_Tuple2', _0: 0, _1: 1};
+		}
+	} else {
+		if (_p0._1.ctor === '[]') {
+			var _p3 = _p0._0;
+			var result = A3(
+				_elm_lang$core$Result$map2,
+				F2(
+					function (numberDice, sides) {
+						return {ctor: '_Tuple2', _0: numberDice, _1: sides};
+					}),
+				_elm_lang$core$String$toInt(
+					A2(_elm_lang$core$String$left, _p3, dice)),
+				_elm_lang$core$String$toInt(
+					A2(
+						_elm_lang$core$String$right,
+						(_elm_lang$core$String$length(dice) - _p3) - 1,
+						dice)));
+			var _p2 = result;
+			if (_p2.ctor === 'Ok') {
+				return _p2._0;
+			} else {
+				return {ctor: '_Tuple2', _0: 0, _1: 1};
+			}
+		} else {
+			return {ctor: '_Tuple2', _0: 0, _1: 1};
+		}
+	}
+};
+var _user$project$Dice$rollD6 = function (originalSeed) {
+	return A2(
+		_elm_lang$core$Random$step,
+		A2(_elm_lang$core$Random$int, 1, 6),
+		originalSeed);
+};
+var _user$project$Dice$rollWithReroll = F3(
+	function (rollSucceeded, reroll, originalSeed) {
+		rollWithReroll:
+		while (true) {
+			var _p4 = _user$project$Dice$rollD6(originalSeed);
+			var roll = _p4._0;
+			var newSeed = _p4._1;
+			var pass = rollSucceeded(roll);
+			var _p5 = pass;
+			if (_p5 === true) {
+				return {ctor: '_Tuple2', _0: true, _1: newSeed};
+			} else {
+				if ((_elm_lang$core$Native_Utils.eq(roll, 1) && _elm_lang$core$Native_Utils.eq(reroll, 'ones')) || _elm_lang$core$Native_Utils.eq(reroll, 'all')) {
+					var _v4 = rollSucceeded,
+						_v5 = 'none',
+						_v6 = newSeed;
+					rollSucceeded = _v4;
+					reroll = _v5;
+					originalSeed = _v6;
+					continue rollWithReroll;
+				} else {
+					return {ctor: '_Tuple2', _0: false, _1: newSeed};
+				}
+			}
+		}
+	});
+var _user$project$Dice$rollRound = F4(
+	function (numberOfDice, rollSucceeded, reroll, originalSeed) {
+		return A3(
+			_elm_lang$core$List$foldl,
+			F2(
+				function (n, _p6) {
+					var _p7 = _p6;
+					var _p10 = _p7._0;
+					var _p8 = A3(_user$project$Dice$rollWithReroll, rollSucceeded, reroll, _p7._1);
+					var pass = _p8._0;
+					var newSeed = _p8._1;
+					var _p9 = pass;
+					if (_p9 === true) {
+						return {ctor: '_Tuple2', _0: _p10 + 1, _1: newSeed};
+					} else {
+						return {ctor: '_Tuple2', _0: _p10, _1: newSeed};
+					}
+				}),
+			{ctor: '_Tuple2', _0: 0, _1: originalSeed},
+			A2(_elm_lang$core$List$range, 1, numberOfDice));
+	});
+var _user$project$Dice$rollXdY = F2(
+	function (dice, seed) {
+		var _p11 = _user$project$Dice$splitDice(dice);
+		var numberDice = _p11._0;
+		var sides = _p11._1;
+		return A3(
+			_elm_lang$core$Array$foldl,
+			F2(
+				function (n, _p12) {
+					var _p13 = _p12;
+					var _p14 = A2(
+						_elm_lang$core$Random$step,
+						A2(_elm_lang$core$Random$int, 1, sides),
+						_p13._1);
+					var randomNumber = _p14._0;
+					var newSeed = _p14._1;
+					return {ctor: '_Tuple2', _0: _p13._0 + randomNumber, _1: newSeed};
+				}),
+			{ctor: '_Tuple2', _0: 0, _1: seed},
+			A2(_elm_lang$core$Array$repeat, numberDice, 0));
+	});
+var _user$project$Dice$maxXdY = function (dice) {
+	var _p15 = _user$project$Dice$splitDice(dice);
+	var numberDice = _p15._0;
+	var sides = _p15._1;
+	return numberDice * sides;
+};

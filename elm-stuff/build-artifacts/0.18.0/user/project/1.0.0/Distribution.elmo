@@ -1,0 +1,244 @@
+var _user$project$Distribution$calculatePercentages = F2(
+	function (counts, iterations) {
+		var _p0 = A3(
+			_elm_lang$core$Array$foldr,
+			F2(
+				function (count, _p1) {
+					var _p2 = _p1;
+					var thisPercent = (_elm_lang$core$Basics$toFloat(count) / _elm_lang$core$Basics$toFloat(iterations)) * 100;
+					var newTotal = _p2._1 + thisPercent;
+					var newArray = A2(
+						_elm_lang$core$Array$push,
+						{thisPercent: thisPercent, totalPercent: newTotal},
+						_p2._0);
+					return {ctor: '_Tuple2', _0: newArray, _1: newTotal};
+				}),
+			{ctor: '_Tuple2', _0: _elm_lang$core$Array$empty, _1: 0},
+			counts);
+		var distribution = _p0._0;
+		var totalPercent = _p0._1;
+		return distribution;
+	});
+var _user$project$Distribution$calculateWeaponDamage = F2(
+	function (weapon, seed) {
+		return A3(
+			_elm_lang$core$Array$foldl,
+			F2(
+				function (roll, _p3) {
+					var _p4 = _p3;
+					var _p12 = _p4._1;
+					var _p11 = _p4._0;
+					var _p5 = roll;
+					switch (_p5.ctor) {
+						case 'AttackRoll':
+							return A2(_user$project$Dice$rollXdY, _p5._0.attacks, _p12);
+						case 'HitRoll':
+							return A4(
+								_user$project$Dice$rollRound,
+								_p11,
+								function (r) {
+									return _elm_lang$core$Native_Utils.cmp(r, _p5._0.skill) > -1;
+								},
+								_p5._0.reroll,
+								_p12);
+						case 'WoundRoll':
+							var _p7 = _p5._0.toughness;
+							var _p6 = _p5._0.strength;
+							var rollNeeded = (_elm_lang$core$Native_Utils.cmp(_p6, 2 * _p7) > -1) ? 2 : ((_elm_lang$core$Native_Utils.cmp(_p6, _p7) > 0) ? 3 : ((_elm_lang$core$Native_Utils.cmp(_p6 * 2, _p7) < 1) ? 6 : ((_elm_lang$core$Native_Utils.cmp(_p6, _p7) < 0) ? 5 : 4)));
+							return A4(
+								_user$project$Dice$rollRound,
+								_p11,
+								function (r) {
+									return _elm_lang$core$Native_Utils.cmp(r, rollNeeded) > -1;
+								},
+								_p5._0.reroll,
+								_p12);
+						case 'SaveRoll':
+							return A4(
+								_user$project$Dice$rollRound,
+								_p11,
+								function (r) {
+									return _elm_lang$core$Native_Utils.cmp(r, _p5._0.save - _p5._0.armorPiercing) < 0;
+								},
+								'none',
+								_p12);
+						default:
+							return A3(
+								_elm_lang$core$List$foldl,
+								F2(
+									function (n, _p8) {
+										var _p9 = _p8;
+										var _p10 = A2(_user$project$Dice$rollXdY, _p5._0.damage, _p9._1);
+										var roll = _p10._0;
+										var newSeed = _p10._1;
+										return {ctor: '_Tuple2', _0: _p9._0 + roll, _1: newSeed};
+									}),
+								{ctor: '_Tuple2', _0: 0, _1: _p12},
+								A2(_elm_lang$core$List$range, 1, _p11));
+					}
+				}),
+			{ctor: '_Tuple2', _0: 0, _1: seed},
+			weapon);
+	});
+var _user$project$Distribution$calculateTotalDamage = F2(
+	function (weapons, originalSeed) {
+		return A3(
+			_elm_lang$core$Array$foldl,
+			F2(
+				function (weapon, _p13) {
+					var _p14 = _p13;
+					var _p15 = A2(_user$project$Distribution$calculateWeaponDamage, weapon, _p14._1);
+					var damage = _p15._0;
+					var newSeed = _p15._1;
+					return {ctor: '_Tuple2', _0: _p14._0 + damage, _1: newSeed};
+				}),
+			{ctor: '_Tuple2', _0: 0, _1: originalSeed},
+			weapons);
+	});
+var _user$project$Distribution$calculateDistribution = F3(
+	function (model, maxDamage, originalSeed) {
+		return A3(
+			_elm_lang$core$List$foldl,
+			F2(
+				function (n, _p16) {
+					var _p17 = _p16;
+					var _p20 = _p17._0;
+					var _p18 = A2(_user$project$Distribution$calculateTotalDamage, model.weapons, _p17._1);
+					var damage = _p18._0;
+					var newSeed = _p18._1;
+					var currentCount = A2(_elm_lang$core$Array$get, damage, _p20);
+					var _p19 = currentCount;
+					if (_p19.ctor === 'Just') {
+						return {
+							ctor: '_Tuple2',
+							_0: A3(_elm_lang$core$Array$set, damage, _p19._0 + 1, _p20),
+							_1: newSeed
+						};
+					} else {
+						return {ctor: '_Tuple2', _0: _p20, _1: newSeed};
+					}
+				}),
+			{
+				ctor: '_Tuple2',
+				_0: A2(_elm_lang$core$Array$repeat, maxDamage + 1, 0),
+				_1: originalSeed
+			},
+			A2(_elm_lang$core$List$range, 1, model.iterations));
+	});
+var _user$project$Distribution$calculateWeaponMaxDamage = function (weapon) {
+	return A3(
+		_elm_lang$core$Array$foldl,
+		F2(
+			function (roll, memo) {
+				var _p21 = roll;
+				switch (_p21.ctor) {
+					case 'AttackRoll':
+						return _user$project$Dice$maxXdY(_p21._0.attacks);
+					case 'DamageRoll':
+						return memo * _user$project$Dice$maxXdY(_p21._0.damage);
+					default:
+						return memo;
+				}
+			}),
+		0,
+		weapon);
+};
+var _user$project$Distribution$calculateMaxDamage = function (model) {
+	return A3(
+		_elm_lang$core$Array$foldl,
+		F2(
+			function (x, y) {
+				return x + y;
+			}),
+		0,
+		A2(_elm_lang$core$Array$map, _user$project$Distribution$calculateWeaponMaxDamage, model.weapons));
+};
+var _user$project$Distribution$distributionData = F2(
+	function (model, initialSeed) {
+		var maxDamage = _user$project$Distribution$calculateMaxDamage(model);
+		var seed = _elm_lang$core$Random$initialSeed(initialSeed);
+		var _p22 = A3(_user$project$Distribution$calculateDistribution, model, maxDamage, seed);
+		var distribution = _p22._0;
+		var newSeed = _p22._1;
+		var percentages = A2(_user$project$Distribution$calculatePercentages, distribution, model.iterations);
+		return percentages;
+	});
+var _user$project$Distribution$hashes = _krisajenkins$formatting$Formatting$Format(
+	F2(
+		function (callback, count) {
+			return callback(
+				A2(
+					_elm_lang$core$String$repeat,
+					_elm_lang$core$Basics$floor(count),
+					'#'));
+		}));
+var _user$project$Distribution$formatRow = function () {
+	var totalPercent = A3(
+		_krisajenkins$formatting$Formatting$padLeft,
+		6,
+		_elm_lang$core$Native_Utils.chr(' '),
+		_krisajenkins$formatting$Formatting$roundTo(2));
+	var thisPercent = A3(
+		_krisajenkins$formatting$Formatting$padLeft,
+		6,
+		_elm_lang$core$Native_Utils.chr(' '),
+		_krisajenkins$formatting$Formatting$roundTo(2));
+	var count = A3(
+		_krisajenkins$formatting$Formatting$padLeft,
+		2,
+		_elm_lang$core$Native_Utils.chr('0'),
+		_krisajenkins$formatting$Formatting$int);
+	return _krisajenkins$formatting$Formatting$print(
+		A2(
+			_krisajenkins$formatting$Formatting_ops['<>'],
+			count,
+			A2(
+				_krisajenkins$formatting$Formatting_ops['<>'],
+				_krisajenkins$formatting$Formatting$s(' '),
+				A2(
+					_krisajenkins$formatting$Formatting_ops['<>'],
+					thisPercent,
+					A2(
+						_krisajenkins$formatting$Formatting_ops['<>'],
+						_krisajenkins$formatting$Formatting$s('% '),
+						A2(
+							_krisajenkins$formatting$Formatting_ops['<>'],
+							totalPercent,
+							A2(
+								_krisajenkins$formatting$Formatting_ops['<>'],
+								_krisajenkins$formatting$Formatting$s('% '),
+								_user$project$Distribution$hashes)))))));
+}();
+var _user$project$Distribution$row = F3(
+	function (maxIndex, index, distributionRow) {
+		var _p23 = distributionRow;
+		var thisPercent = _p23.thisPercent;
+		var totalPercent = _p23.totalPercent;
+		return {
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(
+				A4(_user$project$Distribution$formatRow, maxIndex - index, thisPercent, totalPercent, thisPercent)),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$br,
+					{ctor: '[]'},
+					{ctor: '[]'}),
+				_1: {ctor: '[]'}
+			}
+		};
+	});
+var _user$project$Distribution$renderDistribution = function (distribution) {
+	var _p24 = distribution;
+	if (_p24.ctor === 'Just') {
+		var _p25 = _p24._0;
+		return _elm_lang$core$List$concat(
+			A2(
+				_elm_lang$core$List$indexedMap,
+				_user$project$Distribution$row(
+					_elm_lang$core$Array$length(_p25) - 1),
+				_elm_lang$core$Array$toList(_p25)));
+	} else {
+		return {ctor: '[]'};
+	}
+};
